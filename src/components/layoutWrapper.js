@@ -1,15 +1,22 @@
 import React from 'react';
-import FormInput from './formInput';
+import {
+    Modal,
+    ModalBody
+  } from 'reactstrap';import FormInput from './formInput';
 import ResultList from './resultList';
 
 export default class LayoutWrapper extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+        editJobModal: false,
         priorities: [ // TODO: Will be set to be called from the Node.js API
             { id: "1", name: "Urgent" },
             { id: "2", name: "Regular" },
             { id: "3", name: "Trivial" }
+        ],
+        jobs: [
+
         ]
     };
   }
@@ -18,6 +25,12 @@ export default class LayoutWrapper extends React.Component {
     this.setState({
         [event.target.name]: event.target.value
     }, () => console.log(this.state));
+  }
+
+  editJobToggle = () => {
+      this.setState({
+        editJobModal: !this.state.editJobModal
+      })
   }
 
   isValid = () => { // 'disabled={this.props.isValid()}'
@@ -33,12 +46,11 @@ export default class LayoutWrapper extends React.Component {
   }
 
   createJob = async() => {
+    this.isValid();
 
-  }
+}
 
-  searchJob = async() => {
-
-  }
+  filterJobs = async() => {}
 
   render() {
     return (
@@ -47,9 +59,21 @@ export default class LayoutWrapper extends React.Component {
             priorities={this.state.priorities}
             onInputChange={this.onInputChange}
             isValid={this.isValid}
-            submitSearch={this.submitSearch}
+            createJob={this.createJob}
+            filter={this.filterJobs}
         />
-        <ResultList />
+        <div className="offset-1 col-10">
+            <ResultList
+                jobs={this.state.jobs}
+                editJobToggle={this.editJobToggle}
+            />
+        </div>
+        <Modal isOpen={this.state.editJobModal} toggle={this.editJobToggle}>
+            <ModalBody>
+                <button className="offset-11 col-1" onClick={this.editJobToggle}>x</button>
+                <button className="offset-5 col-2" onClick={this.editJobToggle}>Update</button>
+            </ModalBody>
+        </Modal>
       </>
     );
   }

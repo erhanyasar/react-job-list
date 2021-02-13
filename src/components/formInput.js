@@ -37,7 +37,7 @@ export default class FormInput extends React.Component {
                 </select>
             </div>
             <div className="col-12 my-2">
-                <div className="col-2">
+                <div className="col-2" style={{ paddingLeft: '0px'}}>
                     <button type="button" className="btn btn-primary btn-block" onClick={this.props.createJob}>Create</button>
                 </div>
             </div>
