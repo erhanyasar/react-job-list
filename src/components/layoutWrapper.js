@@ -11,12 +11,14 @@ export default class LayoutWrapper extends React.Component {
     this.state = {
         editJobModal: false,
         priorities: [ // TODO: Will be set to be called from the Node.js API
-            { id: "1", name: "Urgent" },
-            { id: "2", name: "Regular" },
-            { id: "3", name: "Trivial" }
+            { id: "1", name: "Urgent", color: "red" },
+            { id: "2", name: "Regular", color: "yellow" },
+            { id: "3", name: "Trivial", color: "blue" }
         ],
-        jobs: [
-
+        jobsList: [
+            { id: "1", title: "slkjdf", priority: "Urgent", color: "red" },
+            { id: "2", title: "ksdj", priority: "Regular", color: "yellow" },
+            { id: "3", title: "slkdajf", priority: "Trivial", color: "blue" }
         ]
     };
   }
@@ -64,7 +66,7 @@ export default class LayoutWrapper extends React.Component {
         />
         <div className="offset-1 col-10">
             <ResultList
-                jobs={this.state.jobs}
+                jobsList={this.state.jobsList}
                 editJobToggle={this.editJobToggle}
             />
         </div>

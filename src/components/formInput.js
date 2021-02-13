@@ -38,6 +38,7 @@ export default class FormInput extends React.Component {
             </div>
             <div className="col-12 my-2">
                 <div className="col-2" style={{ paddingLeft: '0px'}}>
+                    {/* Colorful button prefered in sake of UX for main CTA button even it might be a bad point from the vision of technical interviewee */}
                     <button type="button" className="btn btn-primary btn-block" onClick={this.props.createJob}>Create</button>
                 </div>
             </div>
