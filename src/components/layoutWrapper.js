@@ -12,11 +12,6 @@ export default class LayoutWrapper extends React.Component {
         editJobModal: false,
         jobToEdit: {},
         jobToCreate: {},
-        priorities: [ // TODO: Will be set to be called from the Node.js API
-            { id: "1", name: "Urgent", color: "red" },
-            { id: "2", name: "Regular", color: "yellow" },
-            { id: "3", name: "Trivial", color: "blue" }
-        ],
         jobsList: [
             { id: "1", title: "slkjdf", priority: "Urgent", color: "red" },
             { id: "2", title: "ksdj", priority: "Regular", color: "yellow" },
@@ -68,16 +63,6 @@ export default class LayoutWrapper extends React.Component {
             jobsList: tempArr
         },() => console.log(this.state.jobsList));
     }
-  }
-
-  componentDidMount() {
-    fetch('http://localhost:4000/')
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          priorities: data
-          });
-        });
   }
 
   render() {

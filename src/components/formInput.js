@@ -4,11 +4,20 @@ export default class FormInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        priorities: this.props.priorities
+        priorities: []
     };
   }
-  componentDidMount() {
+
+  async componentDidMount() {
     this.searchInput.focus(); // To focus on input field on opening
+
+    await fetch('http://localhost:4000/')
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          priorities: data
+          });
+        });
   }
 
   render() {
