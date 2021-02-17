@@ -50,7 +50,7 @@ export default class ResultList extends React.Component {
     this.setState({
       jobsList: tempArr,
       filteredJobsList: tempArr
-    },() => console.log(this.state.jobsList))
+    })
 
     this.editJobToggle();
   }
@@ -65,7 +65,7 @@ export default class ResultList extends React.Component {
   onInputChange = (event) => {
     this.setState({
         [event.target.name]: event.target.value
-    },() => console.log(this.state));
+    });
   }
 
   async componentDidMount() {

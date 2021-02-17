@@ -40,14 +40,14 @@ export default class LayoutWrapper extends React.Component {
             color: this.state.priorityInput === 'Urgent' ? 'red' : this.state.priorityInput === 'Regular' ? 'yellow' : this.state.priorityInput === 'Trivial' ? 'blue' : ''
         }
     },() => {
-      console.log(this.state.jobToCreate);
-      //if (!this.isValid()) {
+      if (!this.isValid()) {
         let tempArr = this.state.jobsList.slice();
         tempArr.push(this.state.jobToCreate);
         this.setState({
-          jobsList: tempArr
+          jobsList: tempArr,
+          filteredJobsList: tempArr
         },() => console.log(this.state.jobsList));
-      
+      };
     });
   }
 
