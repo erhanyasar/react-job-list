@@ -4,7 +4,7 @@ export default class FormInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        priorities: []
+        priorities: this.props.priorities
     };
   }
 
@@ -21,11 +21,15 @@ export default class FormInput extends React.Component {
   }
 
   render() {
-    const prioritySelectbox = this.state.priorities.map((priority, index) => {
+    const prioritySelectbox = this.state.priorities ? this.state.priorities.map((priority, index) => {
         return (
-            <option key={index} label={priority.name} value={priority.id} />
+            <option key={index} label={priority.name} value={priority.name} />
         )
     })
+    :
+    ''
+    ;
+
     return (
       <>
         <div className="offset-2 col-8 my-5">

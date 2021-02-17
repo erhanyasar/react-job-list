@@ -1,16 +1,11 @@
 import React from 'react';
-import {
-    Modal,
-    ModalBody
-  } from 'reactstrap';import FormInput from './formInput';
+import FormInput from './formInput';
 import ResultList from './resultList';
 
 export default class LayoutWrapper extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        editJobModal: false,
-        jobToEdit: {},
         jobToCreate: {},
         jobsList: [
             { id: "1", title: "slkjdf", priority: "Urgent", color: "red" },
@@ -26,21 +21,10 @@ export default class LayoutWrapper extends React.Component {
     });
   }
 
-  editJobToggle = (job) => {
-      this.setState({
-        editJobModal: !this.state.editJobModal
-      })
-      if (job.id) {
-          this.setState({
-            jobToEdit: job
-          },() => console.log(this.state))
-      }
-  }
-
   isValid = () => { // By disabling the 'Create Button' on default, user forced to type or select inputs so that half-validation gained.
     let isSuccessfulParam = true;
-    let regExp = /qwertyuioplkjhgfdsazxcvbnm/; // TODO: Not a successful regExp check for English letters but, will find more appropriate
-
+    let regExp = /qwertyuioplkjhgfdsazxcvbnm/; // TODO: Not a successful regExp check for English letters (it accepts all letters other than
+                                              // special chars) but, will find more appropriate
     if (this.state.priorityInput && this.state.jobNameInput && (!regExp.test(this.state.jobNameInput))){
         isSuccessfulParam = false;
     }
@@ -50,44 +34,38 @@ export default class LayoutWrapper extends React.Component {
   createJob = async() => {
     this.setState({
         jobToCreate: {
-            id: this.state.jobsList.length,
+            id: this.state.jobsList.length + 1 + '',
             title: this.state.jobNameInput,
             priority: this.state.priorityInput,
-            color: "red"
+            color: this.state.priorityInput === 'Urgent' ? 'red' : this.state.priorityInput === 'Regular' ? 'yellow' : this.state.priorityInput === 'Trivial' ? 'blue' : ''
         }
-    },() => console.log(this.state.jobToCreate));
-    if (!this.isValid()) {
-        let tempArr = this.state.jobsList;
+    },() => {
+      console.log(this.state.jobToCreate);
+      //if (!this.isValid()) {
+        let tempArr = this.state.jobsList.slice();
         tempArr.push(this.state.jobToCreate);
         this.setState({
-            jobsList: tempArr
+          jobsList: tempArr
         },() => console.log(this.state.jobsList));
-    }
+      
+    });
   }
 
   render() {
     return (
       <>
         <FormInput
-            priorities={this.state.priorities}
-            onInputChange={this.onInputChange}
-            isValid={this.isValid}
-            createJob={this.createJob}
-            filter={this.filterJobs}
+          onInputChange={this.onInputChange}
+          isValid={this.isValid}
+          createJob={this.createJob}
+          filter={this.filterJobs}
         />
         <div className="offset-1 col-10">
-            <ResultList
-                jobsList={this.state.jobsList}
-                editJobToggle={this.editJobToggle}
-            />
+          <ResultList
+            jobsList={this.state.jobsList}
+            filteredJobsList={this.state.jobsList}
+          />
         </div>
-        <Modal isOpen={this.state.editJobModal} toggle={this.editJobToggle}>
-            <ModalBody>
-                <button className="offset-11 col-1" onClick={this.editJobToggle}>x</button>
-                <h3>{this.state.jobToEdit.name}</h3>
-                <button className="offset-5 col-2" onClick={this.editJobToggle}>Update</button>
-            </ModalBody>
-        </Modal>
       </>
     );
   }
