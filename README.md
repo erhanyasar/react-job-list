@@ -8,7 +8,7 @@ In the project directory, you can run:
 
 ### `yarn start`
 
-#### In order to run this project, please do run `React-Job-List-Express-Server` beforehand to get priorities.
+#### In order to run this project, please do run `React-Job-List-Express-Server` beforehand to get job's priorities.
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
