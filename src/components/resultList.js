@@ -11,24 +11,9 @@ export default class ResultList extends React.Component {
     super(props);
     this.state = {
       editJobModal: false,
-      jobsList: this.props.jobsList,
-      filteredJobsList: this.props.jobsList,
+      filteredAndOrdered: props.jobsList,
       jobToEdit: {}
     };
-  }
-// If typed search parameter fetches with any of the job title, it filters out rest of the jobs; when param totally deleted, all of the jobs shown again.
-  filterJobs = (event) => {
-    let filteredJobs = this.state.jobsList.filter(job => (job.title === event.target.value));
-
-    if (filteredJobs.length) {
-      this.setState({
-        filteredJobsList: filteredJobs  
-      });
-    } else if (event.target.value === '') {
-      this.setState({
-        filteredJobsList: this.state.jobsList  
-      });
-    }
   }
 
   editJobToggle = (job) => {
@@ -38,6 +23,12 @@ export default class ResultList extends React.Component {
     })
   }
 
+  onInputChange = (event) => {
+    this.setState({
+        [event.target.name]: event.target.value
+    });
+  }
+
   editJob = () => {
     let newJobObj = Object.assign({}, this.state.jobToEdit);
     newJobObj.priority = this.state.priorityUpdate;
@@ -45,30 +36,52 @@ export default class ResultList extends React.Component {
     let filteredColor = this.state.priorities.filter(priority => priority.name === this.state.priorityUpdate)
     newJobObj.color = filteredColor[0].color
     
-    let tempArr = this.state.jobsList.slice();
+    let tempArr = this.state.filteredAndOrdered.slice();
     tempArr.splice(parseInt(this.state.jobToEdit.id) - 1, 1, newJobObj);
     this.setState({
-      jobsList: tempArr,
-      filteredJobsList: tempArr
+      filteredAndOrdered: tempArr,
     })
 
     this.editJobToggle();
+    this.orderJobs();
+  }
+
+  // If typed search parameter fetches with any of the job title, it filters out rest of the jobs; when param totally deleted, all of the jobs shown again.
+  // TODO: Filter for each character typed by user.
+  filterJobs = (event) => {
+    let filteredJobs = this.props.jobsList.filter(job => (job.title === event.target.value));
+
+    if (filteredJobs.length) {
+      this.setState({
+        filteredAndOrdered: filteredJobs  
+      });
+    } else if (event.target.value === '') {
+      this.setState({
+        filteredAndOrdered: this.props.jobsList  
+      });
+    }
   }
 
   deleteJob = (jobToDelete) => {
-    let tempArr = this.state.filteredJobsList.filter( job => job.id != jobToDelete.id);
+    let tempArr = this.state.filteredAndOrdered.filter(job => job.id != jobToDelete.id);
     this.setState({
-      filteredJobsList: tempArr
+      filteredAndOrdered: tempArr
     });
   }
 
-  onInputChange = (event) => {
-    this.setState({
-        [event.target.name]: event.target.value
+  orderJobs = () => {
+    const orderedJobList = this.state.filteredAndOrdered.map(job => {
+      return job;
     });
   }
 
   async componentDidMount() {
+    if(this.state.userInput === ''){
+      this.setState({
+        filteredJobsList: this.state.jobsList
+      },() => this.orderJobs());
+    }
+
     await fetch('http://localhost:4000/')
       .then(response => response.json())
       .then(data => {
@@ -79,7 +92,7 @@ export default class ResultList extends React.Component {
   }
 
   render() {
-    const filteredjobsList = this.state.filteredJobsList.map((job, index) => {
+    const filteredAndOrdered = this.state.filteredAndOrdered.map((job, index) => {
       return (
         <React.Fragment key={index}>
           {/* Flex used to align items center */}
@@ -107,9 +120,7 @@ export default class ResultList extends React.Component {
       )
     });
     const prioritySelectbox = this.state.priorities ? this.state.priorities.map((priority, index) => {
-      return (
-          <option key={index} label={priority.name} value={priority.name} />
-      )
+      return <option key={index} label={priority.name} value={priority.name} />;
     })
     :
     ''
@@ -124,7 +135,7 @@ export default class ResultList extends React.Component {
             <input type="text" className="form-control" name="userInput" placeholder="Search Job" onChange={e => this.filterJobs(e)}/>
           </div>
         </div>
-        { filteredjobsList }
+        { filteredAndOrdered }
         <Modal isOpen={this.state.editJobModal} toggle={this.editJobToggle}>
             <ModalBody>
                 <button className="offset-11 col-1" onClick={this.editJobToggle}>x</button>
