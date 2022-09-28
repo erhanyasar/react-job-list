@@ -79,9 +79,10 @@ export default class FormInput extends React.Component {
               <select
                 className="form-control"
                 name="priorityInput"
+                defaultValue=""
                 onChange={(e) => this.onInputChange(e)}
               >
-                <option value="" disabled selected hidden>
+                <option value="" disabled hidden>
                   Priority
                 </option>
                 {prioritySelectbox}

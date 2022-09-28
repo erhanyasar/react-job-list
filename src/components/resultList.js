@@ -63,17 +63,13 @@ export default class ResultList extends React.Component {
   }
 
   deleteJob = (jobToDelete) => {
-    let tempArr = this.state.filteredAndOrdered.filter(job => job.id != jobToDelete.id);
+    let tempArr = this.state.filteredAndOrdered.filter(job => job.id !== jobToDelete.id);
     this.setState({
       filteredAndOrdered: tempArr
     });
   }
 
-  orderJobs = () => {
-    const orderedJobList = this.state.filteredAndOrdered.map(job => {
-      return job;
-    });
-  }
+  orderJobs = () => {}
 
   async componentDidMount() {
     if(this.state.userInput === ''){
